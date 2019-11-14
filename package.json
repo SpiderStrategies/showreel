@@ -1,0 +1,27 @@
+{
+  "name": "showreel",
+  "version": "0.0.0",
+  "description": "Javascript show reel, executing a series of callbacks only when the browser is in focus",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SpiderStrategies/showreel.git"
+  },
+  "keywords": [
+    "timer",
+    "show",
+    "showreel",
+    "show",
+    "reel",
+    "request",
+    "animation",
+    "frame",
+    "raf"
+  ],
+  "author": "Nathan Bowser <nathan@spiderstrategies.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/SpiderStrategies/showreel/issues"
+  },
+  "homepage": "https://github.com/SpiderStrategies/showreel#readme"
+}
