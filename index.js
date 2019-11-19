@@ -15,7 +15,7 @@ module.exports = class ShowReel {
 
     this._el = document.createElement('ul')
     this._el.className = 'showreel-task-list'
-
+    this._stopped = true
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
         window.clearInterval(this._interval)
@@ -55,7 +55,9 @@ module.exports = class ShowReel {
   }
 
   _createInterval () {
-    this._interval = window.setInterval(this._tick.bind(this), 50)
+    if (!this._stopped) {
+      this._interval = window.setInterval(this._tick.bind(this), 50)
+    }
   }
 
   /*
@@ -76,14 +78,10 @@ module.exports = class ShowReel {
   }
 
   /*
-   * Clears the showreel, stopping it and removing all the tasks
+   * Stops the showreel and removes all the tasks
    */
   clear () {
-    if (this._interval) {
-      window.clearInterval(this._interval)
-    }
-
-    this._interval = null
+    this.stop()
     this._tasks.length = 0
     this._clearActive()
   }
@@ -92,11 +90,24 @@ module.exports = class ShowReel {
    * Showtime!
    */
   start () {
+    delete this._stopped
     if (this._interval) {
       return
     }
-    this._lastTick = (new Date()).setFullYear(1900)
+
+    if (!this._lastTick) {
+      // No _lastTick, create a new one so we start firing immediately
+      this._lastTick = (new Date()).setFullYear(1900)
+    }
     this._createInterval()
+  }
+
+  stop () {
+    this._stopped = true
+    if (this._interval) {
+      window.clearInterval(this._interval)
+      delete this._interval
+    }
   }
 
 }
