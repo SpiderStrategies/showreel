@@ -1,17 +1,21 @@
 
-module.exports = class ShowReel {
+export default class ShowReel {
 
   /*
    * Builds a showreel with the incoming array of tasks.
    * Each task is a function, with an optional `title` property
    * attached.
+   *
+   * `delay` controls the delay time between each task.
+   * `infinite` forces the showreel to continuously loop through the tasks forever.
    */
-  constructor (tasks = [], delay = 4000) {
+  constructor (tasks = [], delay = 4000, infinite = false) {
     this._interval = null
     this._tasks = []
     this._delay = delay
     this._lastTick = 0
     this._taskIdx = 0 // Counter to keep track of what task is running
+    this._infinite = infinite // If we should infinite the task list while the showreel is running
 
     this._el = document.createElement('ul')
     this._el.className = 'showreel-task-list'
@@ -26,6 +30,8 @@ module.exports = class ShowReel {
 
     // Add all the tasks we received
     tasks.forEach(task => this.add(task))
+
+    this._totalTasks = tasks.length
   }
 
   _clearActive () {
@@ -43,6 +49,10 @@ module.exports = class ShowReel {
       let next = this._tasks.shift()
       this._taskIdx++
 
+      if (this._taskIdx > this._totalTasks && this._infinite) {
+        this._taskIdx = 1 // reset
+      }
+
       if (!next) {
         return this.clear()
       }
@@ -51,6 +61,10 @@ module.exports = class ShowReel {
       this._clearActive()
       this._el.querySelector(`li:nth-child(${this._taskIdx})`).classList.add('active')
       this._lastTick = now
+      if (this._infinite) {
+        // Add to the end of tasks
+        this._tasks.push(next)
+      }
     }
   }
 
@@ -111,3 +125,4 @@ module.exports = class ShowReel {
   }
 
 }
+
